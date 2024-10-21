@@ -33,6 +33,11 @@ class AsyncSerialBase:
             res = await self.write(data)
             data = data[res:]
 
+    async def readline(self, terminator=b"\n"):
+        data = bytearray()
+        while terminator not in data:
+            data += await self.read_exactly(1)
+        return data
 
 if os.name != "nt":
     class AsyncSerial(AsyncSerialBase):
